@@ -140,6 +140,13 @@ li:hover {
     background-color: #2980b9;
 }
 
+/* Well Done Message */
+.well-done {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
 /* Dark Mode Styles */
 .dark-mode {
     background-color: #273038;

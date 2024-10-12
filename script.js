@@ -3,13 +3,14 @@ const newTodoInput = document.getElementById("newToDoInput");
 const addTodoBtn = document.getElementById("addTodoBtn");
 const dueDateInput = document.getElementById("dueDateInput");
 const toggleDarkModeBtn = document.getElementById("toggleDarkMode");
+const wellDoneMessage = document.getElementById("wellDoneMessage");
 
 // Function to save to-dos to localStorage
 function saveTodos() {
     const todos = [];
     todoList.querySelectorAll("li").forEach(item => {
         todos.push({
-            text: item.firstChild.textContent,
+            text: item.querySelector(".todo-text").textContent,
             completed: item.classList.contains("completed"),
             dueDate: item.getAttribute("data-due-date")
         });
@@ -30,43 +31,36 @@ function loadTodos() {
 // Function to create a new to-do item
 function createTodoItem(text, completed = false, dueDate = "") {
     const newTodoItem = document.createElement("li");
-    newTodoItem.innerText = text;
+    newTodoItem.setAttribute("data-due-date", dueDate);
+
+    const todoText = document.createElement("span");
+    todoText.classList.add("todo-text");
+    todoText.innerText = text;
+
+    // Create checkbox for completion
+    const checkTodo = document.createElement("input");
+    checkTodo.type = "checkbox";
+    checkTodo.classList.add("complete-checkbox");
 
     if (completed) {
         newTodoItem.classList.add("completed");
+        checkTodo.checked = true;
     }
 
-    if (dueDate) {
-        newTodoItem.innerText += ` (Due: ${dueDate})`;
-        newTodoItem.setAttribute("data-due-date", dueDate);
-    }
-
-    // Event listener for double-click to edit the to-do item
-    newTodoItem.addEventListener("dblclick", function() {
-        const editInput = document.createElement("input");
-        editInput.type = "text";
-        editInput.value = newTodoItem.firstChild.textContent.trim();
-        editInput.classList.add("edit-todo-input");
-
-        editInput.addEventListener("blur", function() {
-            if (editInput.value.trim() !== "") {
-                newTodoItem.innerText = editInput.value.trim();
-                newTodoItem.appendChild(deleteTodoBtn);
-                newTodoItem.appendChild(completeTodoBtn);
-                saveTodos();
-            }
-        });
-
-        newTodoItem.innerText = "";
-        newTodoItem.appendChild(editInput);
-        editInput.focus();
-    });
-
-    // Mark as completed toggle
-    newTodoItem.addEventListener("click", function() {
-        newTodoItem.classList.toggle("completed");
+    // Event listener for marking as complete
+    checkTodo.addEventListener("change", function() {
+        if (this.checked) {
+            newTodoItem.classList.add("completed");
+            showWellDoneMessage();
+        } else {
+            newTodoItem.classList.remove("completed");
+        }
         saveTodos();
     });
+
+    if (dueDate) {
+        todoText.innerText += ` (Due: ${dueDate})`;
+    }
 
     const deleteTodoBtn = document.createElement("button");
     deleteTodoBtn.innerText = "X";
@@ -78,8 +72,11 @@ function createTodoItem(text, completed = false, dueDate = "") {
         saveTodos();
     });
 
+    newTodoItem.appendChild(checkTodo);
+    newTodoItem.appendChild(todoText);
     newTodoItem.appendChild(deleteTodoBtn);
     todoList.appendChild(newTodoItem);
+
     saveTodos();
 }
 
@@ -89,12 +86,20 @@ function addTodo() {
     const dueDate = dueDateInput.value;
 
     if (newTodoText.length > 1 && newTodoText.length <= 100) {
-        createTodoItem(`${newTodoText}`, false, dueDate);
+        createTodoItem(newTodoText, false, dueDate);
         newTodoInput.value = "";
         dueDateInput.value = "";
     } else {
         alert("Task should be between 2 and 100 characters.");
     }
+}
+
+// Show "Well Done!" Message
+function showWellDoneMessage() {
+    wellDoneMessage.innerText = "Well done!";
+    setTimeout(() => {
+        wellDoneMessage.innerText = "";  // Clear message after 3 seconds
+    }, 3000);
 }
 
 // Event listener for the "Add" button
