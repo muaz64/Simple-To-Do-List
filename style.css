@@ -151,17 +151,17 @@ li:hover {
 
 /* Dark Mode Styles */
 .dark-mode {
-    background-color: #273038;
+    background-color: #4b5155;
     color: #ecf0f1;
 }
 
 .dark-mode .container {
-    background-color: #19222c;
+    background-color: #000000;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .dark-mode input, .dark-mode button {
-    background-color: #3d7e83;
+    background-color: #69cbce;
     color: #fbfeff;
     border: 2px solid #95a5a6;
 }
