@@ -146,7 +146,9 @@ li:hover {
     font-weight: bold;
     text-align: center;
     margin-top: 20px;
+    display: none;  /* Hidden initially, will show with jQuery */
 }
+
 /* Dark Mode Styles */
 .dark-mode {
     background-color: #273038;
